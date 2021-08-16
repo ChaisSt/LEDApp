@@ -1,0 +1,380 @@
+﻿<Window x:Class="LEDApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LEDApp"
+        mc:Ignorable="d"
+        Title="MainWindow" Background="LightGray"
+        Height="800" MinHeight="702" Width="700" MinWidth="559" 
+        WindowStartupLocation="CenterScreen" >
+
+    <Window.DataContext>
+        <local:LedVM/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <SolidColorBrush  x:Key="BrushColor" Color="{Binding PaintColor, UpdateSourceTrigger=PropertyChanged}"/>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="RadioButton.Static.Border" Color="#FF707070"/>
+        <Style x:Key="OptionMarkFocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="14,0,0,0" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="RadioButton.MouseOver.Border" Color="#FF5593FF"/>
+        <SolidColorBrush x:Key="RadioButton.MouseOver.Glyph" Color="#FF212121"/>
+        <SolidColorBrush x:Key="RadioButton.Disabled.Border" Color="#FFBCBCBC"/>
+        <SolidColorBrush x:Key="RadioButton.Disabled.Glyph" Color="#FF707070"/>
+        <SolidColorBrush x:Key="RadioButton.Pressed.Border" Color="#FF3C77DD"/>
+        <SolidColorBrush x:Key="RadioButton.Pressed.Glyph" Color="#FF212121"/>
+        <SolidColorBrush x:Key="RadioButton.Static.Glyph" Color="#FF212121"/>
+        <Style TargetType="{x:Type RadioButton}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource RadioButton.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Grid x:Name="templateRoot" Background="Transparent" SnapsToDevicePixels="True">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border x:Name="radioButtonBorder" Width="30" Height="30" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" HorizontalAlignment="Center" Margin="1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                <Grid x:Name="markGrid" Margin="2">
+                                    <Ellipse x:Name="optionMark" Fill="{StaticResource RadioButton.Static.Glyph}" MinWidth="6" MinHeight="6" Opacity="0"/>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasContent" Value="true">
+                                <Setter Property="FocusVisualStyle" Value="{StaticResource OptionMarkFocusVisual}"/>
+                                <Setter Property="Padding" Value="4,-1,0,0"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="BorderBrush" TargetName="radioButtonBorder" Value="Black"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="BorderBrush" TargetName="radioButtonBorder" Value="Black"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="BorderBrush" TargetName="radioButtonBorder" Value="Black"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="true">
+                                <Setter Property="BorderBrush" TargetName="radioButtonBorder" Value="Black"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="{x:Null}">
+                                <Setter Property="BorderBrush" TargetName="radioButtonBorder" Value="{StaticResource RadioButton.Static.Border}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="205"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <Border Grid.Column="0"  
+                BorderBrush="DimGray" BorderThickness="3" 
+                Background="Gray">
+            <TabControl Background="Gray">
+                <TabItem Header="Colors" Background="DimGray" FontSize="26">
+                    <Grid>
+                        <ScrollViewer VerticalScrollBarVisibility="Hidden" Margin="0,0,0,10">
+                    <StackPanel>
+                        <Label Content="Vibrant" FontSize="20" Margin="5,0"/>
+                        <UniformGrid Columns="6" Rows="4" Margin="5,0">
+                            <RadioButton Background="Red" GroupName="Colors" Command="{Binding SetColorCommand, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding Path=Background, RelativeSource={RelativeSource Self}}"/>
+                                    <RadioButton Background="OrangeRed" GroupName="Colors" Command="{Binding SetColorCommand, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding Path=Background, RelativeSource={RelativeSource Self}}"/>
+                                    <RadioButton Background="DarkOrange" GroupName="Colors" Command="{Binding SetColorCommand, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding Path=Background, RelativeSource={RelativeSource Self}}"/>
+                                    <RadioButton Background="Orange" GroupName="Colors" Command="{Binding SetColorCommand, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding Path=Background, RelativeSource={RelativeSource Self}}"/>
+                                    <RadioButton Background="Gold" GroupName="Colors" Command="{Binding SetColorCommand, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding Path=Background, RelativeSource={RelativeSource Self}}"/>
+                                    <RadioButton Background="Yellow" GroupName="Colors" Command="{Binding SetColorCommand, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding Path=Background, RelativeSource={RelativeSource Self}}"/>
+
+                                    <RadioButton Background="GreenYellow" GroupName="Colors" Command="{Binding SetColorCommand, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding Path=Background, RelativeSource={RelativeSource Self}}"/>
+                                    <RadioButton Background="Chartreuse" GroupName="Colors" Command="{Binding SetColorCommand, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding Path=Background, RelativeSource={RelativeSource Self}}"/>
+                                    <RadioButton Background="LawnGreen" GroupName="Colors" Command="{Binding SetColorCommand, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding Path=Background, RelativeSource={RelativeSource Self}}"/>
+                                    <RadioButton Background="Lime" GroupName="Colors" Command="{Binding SetColorCommand, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding Path=Background, RelativeSource={RelativeSource Self}}"/>
+                            <RadioButton Background="SpringGreen" GroupName="Colors"/>
+                            <RadioButton Background="MediumSpringGreen" GroupName="Colors"/>
+
+                            <RadioButton Background="Aquamarine" GroupName="Colors"/>
+                            <RadioButton Background="Cyan" GroupName="Colors"/>
+                            <RadioButton Background="Aqua" GroupName="Colors"/>
+                            <RadioButton Background="DeepSkyBlue" GroupName="Colors"/>
+                            <RadioButton Background="DodgerBlue" GroupName="Colors"/>
+                            <RadioButton Background="Blue" GroupName="Colors"/>
+
+                            <RadioButton Background="Violet" GroupName="Colors"/>
+                            <RadioButton Background="Magenta" GroupName="Colors"/>
+                            <RadioButton Background="HotPink" GroupName="Colors"/>
+                            <RadioButton Background="DeepPink" GroupName="Colors"/>
+                        </UniformGrid>
+                        <Label Content="Light" Margin="5,0" FontSize="20"/>
+                        <UniformGrid Columns="6" Rows="2" Margin="5,0">
+                            <RadioButton Background="Salmon" GroupName="Colors"/>
+                            <RadioButton Background="LightSalmon" GroupName="Colors"/>
+
+                            <RadioButton Background="SandyBrown" GroupName="Colors"/>
+                            <RadioButton Background="Khaki" GroupName="Colors"/>
+                            <RadioButton Background="Turquoise" GroupName="Colors"/>
+                            <RadioButton Background="MediumTurquoise" GroupName="Colors"/>
+                            <RadioButton Background="MediumAquamarine" GroupName="Colors"/>
+
+                            <RadioButton Background="DarkTurquoise" GroupName="Colors"/>
+                            <RadioButton Background="LightSkyBlue" GroupName="Colors"/>
+                            <RadioButton Background="Plum" GroupName="Colors"/>
+                            <RadioButton Background="Pink" GroupName="Colors"/>
+                            <RadioButton Background="LightPink" GroupName="Colors"/>
+                        </UniformGrid>
+                        <Label Content="Medium" Margin="5,0" FontSize="20"/>
+                        <UniformGrid Columns="6" Rows="3" Margin="5,0">
+                            <RadioButton Background="Crimson" GroupName="Colors"/>
+                            <RadioButton Background="Chocolate" GroupName="Colors"/>
+                            <RadioButton Background="Tomato" GroupName="Colors"/>
+                            <RadioButton Background="Coral" GroupName="Colors"/>
+                            <RadioButton Background="Goldenrod" GroupName="Colors"/>
+                            <RadioButton Background="YellowGreen" GroupName="Colors"/>
+                            <RadioButton Background="LimeGreen" GroupName="Colors"/>
+                            <RadioButton Background="MediumSeaGreen" GroupName="Colors"/>
+                            <RadioButton Background="CornflowerBlue" GroupName="Colors"/>
+                            <RadioButton Background="RoyalBlue" GroupName="Colors"/>
+                            <RadioButton Background="MediumBlue" GroupName="Colors"/>
+                            <RadioButton Background="MediumSlateBlue" GroupName="Colors"/>
+                            <RadioButton Background="MediumPurple" GroupName="Colors"/>
+                            <RadioButton Background="BlueViolet" GroupName="Colors"/>
+                            <RadioButton Background="MediumOrchid" GroupName="Colors"/>
+                            <RadioButton Background="Orchid" GroupName="Colors"/>
+                            <RadioButton Background="LightCoral" GroupName="Colors"/>
+                            <RadioButton Background="PaleVioletRed" GroupName="Colors"/>
+
+                        </UniformGrid>
+                        <Label Content="Dark" FontSize="20" Margin="5,0"/>
+                        <UniformGrid Columns="6" Rows="4" Margin="5,0">
+                            <RadioButton Background="Maroon" GroupName="Colors"/>
+                            <RadioButton Background="DarkRed" GroupName="Colors"/>
+                            <RadioButton Background="Firebrick" GroupName="Colors"/>
+                            <RadioButton Background="IndianRed" GroupName="Colors"/>
+                            <RadioButton Background="MediumVioletRed" GroupName="Colors"/>
+
+                            <RadioButton Background="SaddleBrown" GroupName="Colors"/>
+                            <RadioButton Background="Sienna" GroupName="Colors"/>
+                            <RadioButton Background="Peru" GroupName="Colors"/>
+                            <RadioButton Background="DarkGoldenrod" GroupName="Colors"/>
+                            <RadioButton Background="Olive" GroupName="Colors"/>
+
+                            <RadioButton Background="OliveDrab" GroupName="Colors"/>
+                            <RadioButton Background="ForestGreen" GroupName="Colors"/>
+                            <RadioButton Background="Green" GroupName="Colors"/>
+                            <RadioButton Background="DarkOliveGreen" GroupName="Colors"/>
+                            <RadioButton Background="DarkGreen" GroupName="Colors"/>
+                            <RadioButton Background="DarkSlateGray" GroupName="Colors"/>
+
+                            <RadioButton Background="DarkBlue" GroupName="Colors"/>
+                            <RadioButton Background="MidnightBlue" GroupName="Colors"/>
+                            <RadioButton Background="DarkSlateBlue" GroupName="Colors"/>
+                            <RadioButton Background="Indigo" GroupName="Colors"/>
+
+                            <RadioButton Background="Purple" GroupName="Colors"/>
+                            <RadioButton Background="DarkMagenta" GroupName="Colors"/>
+                            <RadioButton Background="DarkOrchid" GroupName="Colors"/>
+                            <RadioButton Background="DarkViolet" GroupName="Colors"/>
+                        </UniformGrid>
+
+                        <Label Content="Muted" FontSize="20" Margin="5,0"/>
+                        <UniformGrid Columns="6" Rows="1" Margin="7,0">
+
+                            <RadioButton Background="DarkSeaGreen" GroupName="Colors"/>
+                            <RadioButton Background="CadetBlue" GroupName="Colors"/>
+                            <RadioButton Background="DarkCyan" GroupName="Colors"/>
+                            <RadioButton Background="Teal" GroupName="Colors"/>
+                            <RadioButton Background="SeaGreen" GroupName="Colors"/>
+                            <RadioButton Background="SteelBlue" GroupName="Colors"/>
+                        </UniformGrid>
+                        
+                        <Label Content="Pastel" FontSize="20" Margin="5,0"/>
+                        <UniformGrid Columns="6" Rows="5" Margin="7,0,7,5">
+                            <RadioButton Background="White" GroupName="Colors"/>
+                            <RadioButton Background="WhiteSmoke" GroupName="Colors"/>
+                            <RadioButton Background="Gainsboro" GroupName="Colors"/>
+                            <RadioButton Background="LightGray" GroupName="Colors"/>
+                            <RadioButton Background="Silver" GroupName="Colors"/>
+                            <RadioButton Background="DarkGray" GroupName="Colors"/>
+
+                            <RadioButton Background="AntiqueWhite" GroupName="Colors"/>
+                            <RadioButton Background="Bisque" GroupName="Colors"/>
+                            <RadioButton Background="NavajoWhite" GroupName="Colors"/>
+                            <RadioButton Background="PeachPuff" GroupName="Colors"/>
+                            <RadioButton Background="BurlyWood" GroupName="Colors"/>
+                            <RadioButton Background="Tan" GroupName="Colors"/>
+
+                            <RadioButton Background="MintCream" GroupName="Colors"/>
+                            <RadioButton Background="Honeydew" GroupName="Colors"/>
+                            <RadioButton Background="Beige" GroupName="Colors"/>
+                            <RadioButton Background="LightYellow" GroupName="Colors"/>
+                            <RadioButton Background="LightGoldenrodYellow" GroupName="Colors"/>
+                            <RadioButton Background="LemonChiffon" GroupName="Colors"/>
+
+                            <RadioButton Background="AliceBlue" GroupName="Colors"/>
+                            <RadioButton Background="Lavender" GroupName="Colors"/>
+                            <RadioButton Background="LavenderBlush" GroupName="Colors"/>
+                            <RadioButton Background="MistyRose" GroupName="Colors"/>
+                            <RadioButton Background="Thistle" GroupName="Colors"/>
+                            <RadioButton Background="RosyBrown" GroupName="Colors"/>
+
+                            <RadioButton Background="LightCyan" GroupName="Colors"/>
+                            <RadioButton Background="PaleTurquoise" GroupName="Colors"/>
+                            <RadioButton Background="PowderBlue" GroupName="Colors"/>
+                            <RadioButton Background="LightBlue" GroupName="Colors"/>
+                            <RadioButton Background="LightSteelBlue" GroupName="Colors"/>
+                        </UniformGrid>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+                </TabItem>
+                <TabItem Header="Size" FontSize="26">
+                    <Grid Height="170" Margin="0,10" VerticalAlignment="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="60"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" 
+                               Content="Width:" FontSize="20" 
+                               HorizontalAlignment="Right"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" 
+                                     Margin="5,5,30,5" FontSize="18"
+                                     Text="{Binding Path=PanelWidth, UpdateSourceTrigger=PropertyChanged}"/>
+                        
+                        <Label Grid.Row="1" Grid.Column="0" 
+                               Content="Height:" FontSize="20" 
+                               HorizontalAlignment="Right"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" 
+                                 Margin="5,5,30,5" FontSize="18" 
+                                 Text="{Binding Path=PanelHeight, UpdateSourceTrigger=PropertyChanged}"/>
+                        
+                        <Label Grid.Row="2" Grid.Column="0" 
+                               Content="Pitch:" FontSize="20" 
+                               HorizontalAlignment="Right"/>
+                        <TextBox Grid.Row="2" Grid.Column="1"
+                                 Margin="5,5,30,5" FontSize="18"
+                                 Text="{Binding Path=PanelPitch, UpdateSourceTrigger=PropertyChanged}"/>
+                        
+                        <Button Grid.Row="3" Grid.ColumnSpan="2" 
+                                Content="Set Size" FontSize="20" Margin="5" 
+                                Command="{Binding SetSizeCommand}" />
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Border>
+
+        
+        <StackPanel Grid.Column="1" x:Name="PanelGridArea" 
+                    HorizontalAlignment="Center" VerticalAlignment="Center">
+            <ItemsControl ItemsSource="{Binding Columns}" 
+                          HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Label Content="{Binding Column}" 
+                           FontSize="10" Foreground="Black" 
+                           Padding="0"
+                           VerticalContentAlignment="Bottom" HorizontalContentAlignment="Center"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="{Binding PanelWidth}" Margin="17,0,14,-3"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+            
+            <StackPanel Orientation="Horizontal">
+                <ItemsControl ItemsSource="{Binding Rows}" 
+                              HorizontalAlignment="Right" 
+                              VerticalAlignment="Stretch" >
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Label Content="{Binding Row}" 
+                           FontSize="10" Foreground="Black"
+                           VerticalContentAlignment="Center" 
+                           HorizontalContentAlignment="Right"
+                           Padding="0" Margin="0"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="{Binding PanelHeight}" Margin="0,8,0,3" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+
+                <ItemsControl ItemsSource="{Binding Leds}"
+                          VerticalAlignment="Center"  HorizontalAlignment="Center" 
+                          Margin="5,5,10,0" Padding="{Binding LedPitch}"
+                          Background="Black" BorderBrush="DimGray" BorderThickness="3" >
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding LedPressedCommand}"
+                                CommandParameter="{Binding Id}" 
+                                Width="20" Height="20" Margin="{Binding LedPitch}">
+                                <Button.Style>
+                                    <Style TargetType="{x:Type Button}">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type Button}">
+                                                    <Border CornerRadius="10" Margin="3" 
+                                                            Background="{Binding BackgroundColor}" 
+                                                            BorderThickness="3" 
+                                                            BorderBrush="{Binding BorderColor}" 
+                                                            Cursor="Hand" x:Name="ledBorder">
+                                                        <ContentPresenter HorizontalAlignment="Center" 
+                                                                          VerticalAlignment="Center" 
+                                                                          Margin="0"/>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" TargetName="ledBorder" Value="{DynamicResource BrushColor}"/>
+                                                            <!--<Setter Property="BorderBrush" TargetName="ledBorder" Value="{DynamicResource ResourceKey=BrushColor}"/>-->
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="{Binding PanelWidth}" Rows="{Binding PanelHeight}"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
