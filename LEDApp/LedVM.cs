@@ -14,6 +14,8 @@ namespace LEDApp
 {
     class LedVM
     {
+        public static LedVM instance;
+
         public PanelModel Panel { get; set; }
         public LedModel LedPressed { get; set; }
 
@@ -24,7 +26,7 @@ namespace LEDApp
             set
             {
                 _paintColor = value;
-                
+                   
             }
         }
 
@@ -38,30 +40,24 @@ namespace LEDApp
         public ObservableCollection<RowCount> Rows { get; set; }
         public ObservableCollection<LedModel> Leds { get; set; }
 
-        public RelayCommand LedPressedCommand { get; set; }
         public RelayCommand SetColorCommand { get; set; }
         public RelayCommand SetSizeCommand { get; set; }
 
         public LedVM()
         {
+            if (instance == null)
+            {
+                instance = this;
+            }
+
             Rows = new ObservableCollection<RowCount>();
             Columns = new ObservableCollection<ColumnCount>();
             Leds = new ObservableCollection<LedModel>();
 
-            LedPressedCommand = new RelayCommand(o => SetLedColor(o), o => GetLedPressed());
             SetColorCommand = new RelayCommand(o => SetPaintColor(o), o => GetPaintColor());
             SetSizeCommand = new RelayCommand(o => SetPanelSize(), o => ValidateSize());
         }
 
-        private bool GetLedPressed()
-        {
-            return true;
-        }
-        private void SetLedColor(object o)
-        {
-
-            LedColor = string.IsNullOrEmpty(PaintColor) ? "White" : PaintColor;
-        }
 
         private bool GetPaintColor()
         {

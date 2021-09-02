@@ -356,8 +356,8 @@
                                                     </Border>
                                                     <ControlTemplate.Triggers>
                                                         <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter Property="Background" TargetName="ledBorder" Value="{DynamicResource BrushColor}"/>
-                                                            <!--<Setter Property="BorderBrush" TargetName="ledBorder" Value="{DynamicResource ResourceKey=BrushColor}"/>-->
+                                                            <Setter Property="Background" TargetName="ledBorder" Value="{Binding BackgroundColor}"/>
+                                                            <Setter Property="BorderBrush" TargetName="ledBorder" Value="{Binding BorderColor}"/>
                                                         </Trigger>
                                                     </ControlTemplate.Triggers>
                                                 </ControlTemplate>
